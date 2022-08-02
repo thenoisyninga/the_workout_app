@@ -1,4 +1,3 @@
 # the_workout_app
 
-An offline flutter mobile app that tracks the amount and frequency of workouts over time.
-
+An offline flutter mobile app that tracks the amount and frequency of workouts over time. Currently under development
