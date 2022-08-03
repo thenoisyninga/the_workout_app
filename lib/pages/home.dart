@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: h * 0.25,
+                height: h*0.25,
                 color: Colors.white,
               ),
               SizedBox(
@@ -31,45 +31,33 @@ class HomePage extends StatelessWidget {
               ),
               Container(
                 color: Colors.white,
-                height: h * 35,
-                width: w * 80,
+                height: h*35,
+                width: w*80,
                 alignment: Alignment.center,
                 child: ImageSlideshow(
-                  height: (h * 35) - 4,
-                  width: (w * 80) - 4,
+                  height: (h*35)-4,
+                  width: (w*80)-4,
                   children: [
-                    Image.asset(
-                      'assets/images/homepage_slideshow/testPhoto.png',
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      'assets/images/homepage_slideshow/testPhoto.png',
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      'assets/images/homepage_slideshow/testPhoto.png',
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      'assets/images/homepage_slideshow/testPhoto.png',
-                      fit: BoxFit.cover,
-                    ),
+                    Image.asset('assets/images/homepage_slideshow/testPhoto.png', fit: BoxFit.cover,),
+                    Image.asset('assets/images/homepage_slideshow/testPhoto.png', fit: BoxFit.cover,),
+                    Image.asset('assets/images/homepage_slideshow/testPhoto.png', fit: BoxFit.cover,),
+                    Image.asset('assets/images/homepage_slideshow/testPhoto.png', fit: BoxFit.cover,),
                   ],
                 ),
               ),
               SizedBox(
-                height: h * 5,
+                height: h*5,
               ),
               OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      fixedSize: Size(w * 80, h * 13),
-                      onSurface: Colors.black,
+                    fixedSize: Size(w*80, h*13),
+                    onSurface: Colors.black,
                       side: const BorderSide(color: Colors.white, width: 2.5),
                       shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero)),
-                  onPressed: () {
-                    print("Button 1 pressed.");
-                  },
+                      borderRadius: BorderRadius.zero
+                      )
+                  ),
+                  onPressed: () {print("Button 1 pressed.");},
                   child: const Text(
                     'Apki Purani Progress',
                     style: TextStyle(
@@ -78,18 +66,18 @@ class HomePage extends StatelessWidget {
                     ),
                   )),
               SizedBox(
-                height: h * 5,
+                height: h*5,
               ),
               OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                      fixedSize: Size(w * 80, h * 13),
+                      fixedSize: Size(w*80, h*13),
                       onSurface: Colors.black,
                       side: const BorderSide(color: Colors.white, width: 2.5),
                       shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/add_new_progress');
-                  },
+                          borderRadius: BorderRadius.zero
+                      )
+                  ),
+                  onPressed: () {Navigator.pushNamed(context, '/add_new_progress');},
                   child: const Text(
                     'Add New Progress',
                     style: TextStyle(
@@ -98,8 +86,9 @@ class HomePage extends StatelessWidget {
                     ),
                   )),
               SizedBox(
-                height: h * 5,
+                height: h*5,
               ),
+
             ],
           ),
         ),
