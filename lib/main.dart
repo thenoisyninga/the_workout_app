@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_workout_app/pages/add_new_progress.dart';
 import 'package:the_workout_app/pages/home.dart';
+import 'package:the_workout_app/pages/progress_analytics.dart';
 import 'package:the_workout_app/theme_extras/extra_colors.dart';
 
 void main() {
@@ -10,29 +11,19 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'The Workout App 0_0',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: primaryBlack,
-        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
-        // canvasColor: Colors.grey[900]
+        scaffoldBackgroundColor: const Color(0xFF151515),
       ),
       initialRoute: '/home',
       routes: {
         '/home' : (context) => const HomePage(),
-        '/add_new_progress' : (context) => const AddNewProgress()
+        '/add_new_progress' : (context) => const AddNewProgress(),
+        '/progress_analytics' : (context) => const ProgressAnalytics(),
       },
     );
   }
