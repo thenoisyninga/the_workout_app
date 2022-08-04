@@ -11,7 +11,15 @@ class AddNewProgress extends StatelessWidget {
       return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: Text(
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.check_circle_outline_rounded,
+                    size: 35,
+                  ))
+            ],
+            title: const Text(
               'Add New Progress',
               style: TextStyle(fontSize: 25, color: Colors.white),
             ),
@@ -20,13 +28,87 @@ class AddNewProgress extends StatelessWidget {
           body: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              WorkoutCard(h: h, w: w,),
-              WorkoutCard(h: h, w: w,),
-              WorkoutCard(h: h, w: w,),
-              WorkoutCard(h: h, w: w,),
-              WorkoutCard(h: h, w: w,),
-              WorkoutCard(h: h, w: w,),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+              WorkoutCard(
+                h: h,
+                w: w,
+              ),
+
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            shape: CircleBorder(
+              side: BorderSide(color: Colors.white)
+            ),
+            child: Icon(Icons.add)
           ),
         ),
       );
@@ -40,30 +122,77 @@ class WorkoutCard extends StatelessWidget {
 
   WorkoutCard({Key? key, required this.h, required this.w}) : super(key: key);
 
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(h*2, h*1.5, h*2, h*1.5),
+      padding: EdgeInsets.fromLTRB(h * 2, h * 1.5, h * 2, h * 1.5),
       child: Card(
-        color: Colors.grey[900],
+        color: const Color(0xFF090808),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+            side: BorderSide(color: Color(0xFF707070), width: 1.5),
+            borderRadius: BorderRadius.circular(10)),
         child: Container(
-          height: 15*h,
-          width:  10*w,
+          height: 15 * h,
+          width: 10 * w,
           // color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.all(h*3),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                fixedSize: Size(h*2, w * 5),
-                backgroundColor: Colors.blue
-              ),
-              child: Text("A button"),
-              onPressed: () {},
+            padding: EdgeInsets.all(h * 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Pushups',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'per Set',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 30,
+                      width: 50,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '# of Sets',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 30,
+                      width: 50,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

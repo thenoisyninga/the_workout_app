@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: primaryBlack,
-        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+        scaffoldBackgroundColor: const Color(0xFF151515),
         // canvasColor: Colors.grey[900]
       ),
       initialRoute: '/home',
