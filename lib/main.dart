@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_workout_app/pages/add_new_progress.dart';
 import 'package:the_workout_app/pages/home.dart';
 import 'package:the_workout_app/theme_extras/extra_colors.dart';
 
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'The Workout App 0_0',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,7 +29,11 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0A0A0A),
         // canvasColor: Colors.grey[900]
       ),
-      home: const HomePage(),
+      initialRoute: '/home',
+      routes: {
+        '/home' : (context) => const HomePage(),
+        '/add_new_progress' : (context) => const AddNewProgress()
+      },
     );
   }
 }
