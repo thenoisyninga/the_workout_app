@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddNewProgress extends StatelessWidget {
   const AddNewProgress({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class AddNewProgress extends StatelessWidget {
                     Icons.check_circle_outline_rounded,
                     size: 35,
                   )),
-              SizedBox(width: w*3),
+              SizedBox(width: w * 3),
             ],
             title: const Text(
               'Add New Progress',
@@ -101,16 +102,13 @@ class AddNewProgress extends StatelessWidget {
                 h: h,
                 w: w,
               ),
-
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            shape: const CircleBorder(
-              side: const BorderSide(color: Colors.white)
-            ),
-            child: const Icon(Icons.add)
-          ),
+              onPressed: () {},
+              shape: const CircleBorder(
+                  side: BorderSide(color: Colors.white)),
+              child: const Icon(Icons.add)),
         ),
       );
     });
@@ -142,7 +140,7 @@ class WorkoutCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Pushups',
                   style: TextStyle(
                     color: Colors.white,
@@ -150,49 +148,67 @@ class WorkoutCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(
-                  width: 30,
+                SizedBox(
+                  width: 20,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'per Set',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 30,
-                      width: 50,
+                Container(
+                  height: 40,
+                  width: 70,
+                  child:  TextField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 10,
                       color: Colors.white,
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      '# of Sets',
-                      style: TextStyle(
-                        color: Colors.white,
+                    decoration: InputDecoration(
+                      labelText: 'per Set',
+                      labelStyle: TextStyle(
+                        color: Colors.grey[200]
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white
+                        ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 30,
-                      width: 50,
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  height: 40,
+                  width: 70,
+                  child:  TextField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 10,
                       color: Colors.white,
                     ),
-                  ],
+                    decoration: InputDecoration(
+                      labelText: 'per Set',
+                      labelStyle: TextStyle(
+                          color: Colors.grey[200]
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
