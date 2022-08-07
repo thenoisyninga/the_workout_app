@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,21 +12,25 @@ class AddNewProgress extends StatelessWidget {
       final w = constraints.maxWidth / 100;
       return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            actions: [
-              IconButton(
-                  onPressed: () {},
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: AppBar(
+              actions: [
+                IconButton(
                   icon: const Icon(
                     Icons.check_circle_outline_rounded,
                     size: 35,
-                  )),
-              SizedBox(width: w * 3),
-            ],
-            title: const Text(
-              'Add New Progress',
-              style: TextStyle(fontSize: 25, color: Colors.white),
+                  ),
+                  onPressed: () {},
+                ),
+                SizedBox(width: w * 3),
+              ],
+              title: const Text(
+                'Add New Progress',
+                style: TextStyle(fontSize: 25, color: Colors.white),
+              ),
+              centerTitle: true,
             ),
-            centerTitle: true,
           ),
           body: ListView(
             scrollDirection: Axis.vertical,
@@ -106,8 +111,7 @@ class AddNewProgress extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {},
-              shape: const CircleBorder(
-                  side: BorderSide(color: Colors.white)),
+              shape: const CircleBorder(side: BorderSide(color: Colors.white)),
               child: const Icon(Icons.add)),
         ),
       );
@@ -118,6 +122,11 @@ class AddNewProgress extends StatelessWidget {
 class WorkoutCard extends StatelessWidget {
   final double h;
   final double w;
+  int perSet = 0;
+  int numOfSets = 1;
+  String workoutName = 'Push-ups';
+
+
 
   WorkoutCard({Key? key, required this.h, required this.w}) : super(key: key);
 
@@ -140,7 +149,7 @@ class WorkoutCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const AutoSizeText(
                   'Pushups',
                   style: TextStyle(
                     color: Colors.white,
@@ -148,64 +157,61 @@ class WorkoutCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Container(
                   height: 40,
                   width: 70,
-                  child:  TextField(
+                  child: TextField(
+                    // TODO: Add system to set input values to private class variables.
+                    cursorColor: Colors.white,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 10,
+                    textAlignVertical: TextAlignVertical.top,
+                    style: const TextStyle(
+                      fontSize: 20,
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
                       labelText: 'per Set',
                       labelStyle: TextStyle(
-                        color: Colors.grey[200]
-                      ),
+                          fontSize: 12,
+                          color: Colors.grey[200]),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white
-                        ),
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white
-                        ),
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  width: 10,
+                  width: w*3,
                 ),
                 Container(
                   height: 40,
                   width: 70,
-                  child:  TextField(
+                  child: TextField(
+                    cursorColor: Colors.white,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.top,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 20,
                       color: Colors.white,
                     ),
                     decoration: InputDecoration(
-                      labelText: 'per Set',
+                      labelText: '# of Sets',
                       labelStyle: TextStyle(
-                          color: Colors.grey[200]
-                      ),
+                          fontSize: 11,
+                          color: Colors.grey[200]),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white
-                        ),
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white
-                        ),
+                        borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
                   ),

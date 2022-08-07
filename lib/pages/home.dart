@@ -11,11 +11,14 @@ class HomePage extends StatelessWidget {
       final w = constraints.maxWidth / 100;
       return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text(
-              "The Workout App 0_0",
-              style: TextStyle(fontSize: 25, color: Colors.white),
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(70),
+            child: AppBar(
+              centerTitle: true,
+              title: const Text(
+                "The Workout App 0_0",
+                style: TextStyle(fontSize: 25, color: Colors.white),
+              ),
             ),
           ),
           body: Container(
@@ -29,7 +32,7 @@ class HomePage extends StatelessWidget {
                 //   color: Colors.white,
                 // ),
                 SizedBox(
-                  height: h * 3,
+                  height: h * 2,
                 ),
                 Container(
                   color: Colors.white,
