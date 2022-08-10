@@ -13,7 +13,6 @@ class AddNewProgress extends StatefulWidget {
 }
 
 class _AddNewProgressState extends State<AddNewProgress> {
-  List<Map> workoutCardsData = getWorkoutCardDataList();
 
   void addNewWorkout(String workoutName) {
     setState(() {
@@ -23,7 +22,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> workoutCardsData = getWorkoutCardDataList();
+    List<Map> workoutCardsData = getWorkoutCardDataList() as List<Map>;
     return LayoutBuilder(builder: (context, constraints) {
       final h = constraints.maxHeight / 100;
       final w = constraints.maxWidth / 100;
@@ -53,7 +52,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
           body: SizedBox(
             child: ListView(
               scrollDirection: Axis.vertical,
-              children: workoutCardsData.map((workoutName) => WorkoutCard(workoutName: workoutName)).toList(),
+              children: workoutCardsData.map((workoutData) => WorkoutCard(workoutName: workoutData['workoutName'])).toList(),
             ),
           ),
           floatingActionButton: FloatingActionButton(

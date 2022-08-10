@@ -36,6 +36,7 @@ dependencies:
   auto_size_text: ^3.0.0
   sqflite: ^2.0.3+1
   path: ^1.8.1
+  shared_preferences: ^2.0.15
 
 
 dev_dependencies:
