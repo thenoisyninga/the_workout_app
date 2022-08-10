@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home' : (context) => const HomePage(),
-        '/add_new_progress' : (context) => const AddNewProgress(),
+        '/add_new_progress' : (context) => AddNewProgress(),
         '/progress_analytics' : (context) => const ProgressAnalytics(),
       },
     );
