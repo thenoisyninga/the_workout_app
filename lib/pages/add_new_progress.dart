@@ -53,7 +53,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
           body: SizedBox(
             child: ListView(
               scrollDirection: Axis.vertical,
-              children: workoutCardsData.map((workoutName) => WorkoutCard(workoutName: workoutName)).toList(),
+              children: workoutCardsData.map((workoutData) => WorkoutCard(workoutName: workoutData['workoutName'])).toList(),
             ),
           ),
           floatingActionButton: FloatingActionButton(
