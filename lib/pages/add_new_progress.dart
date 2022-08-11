@@ -21,15 +21,15 @@ class _AddNewProgressState extends State<AddNewProgress> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          alignment: Alignment.center,
+              alignment: Alignment.center,
               title: const Text(
                 "Are you sure?",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 20),
                 textAlign: TextAlign.center,
               ),
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.grey[900],
               shape: RoundedRectangleBorder(
-                  side: const BorderSide(color: Colors.white),
+                  side: const BorderSide(color: Colors.white, width: 2),
                   borderRadius: BorderRadius.circular(20)),
               actions: [
                 TextButton(
@@ -107,7 +107,70 @@ class _AddNewProgressState extends State<AddNewProgress> {
               ),
           floatingActionButton: FloatingActionButton(
               onPressed: () {
-                addNewWorkout('Push-ups');
+                var newWorkoutController = TextEditingController();
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xFF262626),
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: Colors.white,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(40)),
+                          content: Container(
+                            height: h * 35,
+                            width: w * 65,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  'Add New Workout',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextField(
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                    cursorColor: Colors.white,
+                                    controller: newWorkoutController,
+                                    decoration: InputDecoration(
+                                      focusColor: Colors.red,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.white
+                                        )
+                                      ),
+                                        label: Text(
+                                      'Workout Name',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white,),
+                                    ),
+                                    labelStyle: TextStyle(color: Colors.white)
+                                    )),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    onSurface: Colors.black,
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                    )
+                                  ),
+                                    onPressed: () {
+                                      addNewWorkout(newWorkoutController.text);
+                                      Navigator.pop(_);
+                                    },
+                                    child: Text(
+                                      'Add',
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ));
               },
               shape: const CircleBorder(side: BorderSide(color: Colors.white)),
               child: const Icon(Icons.add)),
