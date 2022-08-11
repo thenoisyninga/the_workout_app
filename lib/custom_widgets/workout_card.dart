@@ -1,13 +1,22 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import '../data_management/workout_card_data_management.dart';
+
 
 class WorkoutCard extends StatefulWidget {
   final String workoutName;
+  final int perSetValue;
+  final int numOfSetsValue;
 
-  WorkoutCard({Key? key, required this.workoutName}) : super(key: key);
+  Function removeACardCallback;
+
+  WorkoutCard(
+      {Key? key, required this.workoutName, required this.removeACardCallback, required this.perSetValue, required this.numOfSetsValue})
+      : super(key: key);
 
   @override
   State<WorkoutCard> createState() => _WorkoutCardState();
+
 }
 
 class _WorkoutCardState extends State<WorkoutCard> {
@@ -23,20 +32,11 @@ class _WorkoutCardState extends State<WorkoutCard> {
     return widget.workoutName;
   }
 
-  int getPerSet() {
-    return int.parse(_numOfSetsInputController.text);
-  }
-
-  int getNumOfSets() {
-    return int.parse(_perSetInputController.text);
-  }
-
-  void setPerSet(int x) {
-    _perSetInputController.text = x.toString();
-  }
-
-  void setNumOfSets(int x) {
-    _numOfSetsInputController.text = x.toString();
+  @override
+  void initState() {
+    _numOfSetsInputController.text = '${widget.numOfSetsValue}';
+    _perSetInputController.text = '${widget.perSetValue}';
+    super.initState();
   }
 
   @override
@@ -44,8 +44,6 @@ class _WorkoutCardState extends State<WorkoutCard> {
     return LayoutBuilder(builder: (context, constraints) {
       final h = constraints.maxHeight / 100;
       final w = constraints.maxWidth / 100;
-      print("The screen height constant: $h");
-      print("The screen width constant: $w");
       return Padding(
         padding: EdgeInsets.fromLTRB(w * 2, w * 1.5, w * 2, w * 1.5),
         child: Card(
@@ -67,7 +65,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                     height: w * 3,
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(w*5, 0, w*5, 0),
+                    padding: EdgeInsets.fromLTRB(w * 5, 0, w * 5, 0),
                     child: Container(
                       alignment: Alignment.center,
                       child: AutoSizeText(
@@ -81,7 +79,9 @@ class _WorkoutCardState extends State<WorkoutCard> {
                       ),
                     ),
                   ),
-                  SizedBox(height: w*3,),
+                  SizedBox(
+                    height: w * 3,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -93,12 +93,14 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         height: 40,
                         width: 70,
                         child: TextField(
-                          // TODO: Add system to set input values to private class variables.
                           controller: _perSetInputController,
                           cursorColor: Colors.white,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           textAlignVertical: TextAlignVertical.top,
+                          onChanged: (text) {
+                            setPerSetValue(getWorkoutName(), int.parse(text));
+                          },
                           style: const TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -123,10 +125,14 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         height: 40,
                         width: 70,
                         child: TextField(
+                          controller: _numOfSetsInputController,
                           cursorColor: Colors.white,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.center,
                           textAlignVertical: TextAlignVertical.top,
+                          onChanged: (text) {
+                            setNumOfSetsValue(getWorkoutName(), int.parse(text));
+                          },
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -148,10 +154,11 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         width: w * 6,
                       ),
                       TextButton(
-                          onPressed: () {},
-                          style: ButtonStyle(
-
-                          ),
+                          onPressed: () {
+                            // removeWorkoutData('Push-ups');
+                            widget.removeACardCallback(getWorkoutName());
+                          },
+                          style: ButtonStyle(),
                           child: Text(
                             "Remove Entry",
                             style: TextStyle(color: Colors.white),
