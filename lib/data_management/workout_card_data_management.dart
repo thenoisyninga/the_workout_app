@@ -1,21 +1,45 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> addWorkoutData(String workoutName, int perSet,int numOfSets) async {
-  String newData = "$workoutName,$perSet,$numOfSets";
-  if (workoutName != '') {
-    //Pulling cache list
-    final prefs = await SharedPreferences.getInstance();
-    List<String>? pulledWorkoutCardDataCache =
-    prefs.getStringList('Workout Card Data Cache');
 
-    if (pulledWorkoutCardDataCache == null) {
-      // If the list, doesn't exist, create a new one.
-      prefs.setStringList('Workout Card Data Cache', []);
-    } else {
-      // Add the data, update it in shared prefs.
-      pulledWorkoutCardDataCache.add(newData);
-      prefs.setStringList(
-          'Workout Card Data Cache', pulledWorkoutCardDataCache);
+  final prefs = await SharedPreferences.getInstance();
+
+  List<String>? pulledWorkoutCardDataCache = prefs.getStringList(
+      'Workout Card Data Cache');
+
+  bool workoutCardAlreadyExists = false;
+
+  // Checking if the name isn't duplicate
+  if (pulledWorkoutCardDataCache == null) {
+    prefs.setStringList('Workout Card Data Cache', []);
+  } else {
+    List<Map> returnMapList = [];
+    for (String stringData in pulledWorkoutCardDataCache) {
+      List<String> x = stringData.split(',');
+      if (workoutName.toLowerCase() == x[0].toLowerCase()) {
+        workoutCardAlreadyExists = true;
+        break;
+      }
+    }
+  }
+
+  if(!workoutCardAlreadyExists) {
+    String newData = "$workoutName,$perSet,$numOfSets";
+    if (workoutName != '') {
+      //Pulling cache list
+      final prefs = await SharedPreferences.getInstance();
+      List<String>? pulledWorkoutCardDataCache =
+      prefs.getStringList('Workout Card Data Cache');
+
+      if (pulledWorkoutCardDataCache == null) {
+        // If the list, doesn't exist, create a new one.
+        prefs.setStringList('Workout Card Data Cache', []);
+      } else {
+        // Add the data, update it in shared prefs.
+        pulledWorkoutCardDataCache.add(newData);
+        prefs.setStringList(
+            'Workout Card Data Cache', pulledWorkoutCardDataCache);
+      }
     }
   }
 }

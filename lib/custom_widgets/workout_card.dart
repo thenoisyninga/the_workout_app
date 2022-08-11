@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import '../data_management/workout_card_data_management.dart';
 
-
 class WorkoutCard extends StatefulWidget {
   final String workoutName;
   final int perSetValue;
@@ -11,12 +10,15 @@ class WorkoutCard extends StatefulWidget {
   Function removeACardCallback;
 
   WorkoutCard(
-      {Key? key, required this.workoutName, required this.removeACardCallback, required this.perSetValue, required this.numOfSetsValue})
+      {Key? key,
+      required this.workoutName,
+      required this.removeACardCallback,
+      required this.perSetValue,
+      required this.numOfSetsValue})
       : super(key: key);
 
   @override
   State<WorkoutCard> createState() => _WorkoutCardState();
-
 }
 
 class _WorkoutCardState extends State<WorkoutCard> {
@@ -131,7 +133,8 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           textAlign: TextAlign.center,
                           textAlignVertical: TextAlignVertical.top,
                           onChanged: (text) {
-                            setNumOfSetsValue(getWorkoutName(), int.parse(text));
+                            setNumOfSetsValue(
+                                getWorkoutName(), int.parse(text));
                           },
                           style: TextStyle(
                             fontSize: 20,

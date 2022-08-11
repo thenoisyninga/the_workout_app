@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/workout_card.dart';
+import '../data_management/database_operations.dart';
 import '../data_management/workout_card_data_management.dart';
 
 class AddNewProgress extends StatefulWidget {
@@ -71,7 +72,59 @@ class _AddNewProgressState extends State<AddNewProgress> {
                     Icons.check_circle_outline_rounded,
                     size: 35,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          backgroundColor: Color(0xFF262626),
+                              title: Text(
+                                  "Are you sure you want to log this data for today?", style: TextStyle(color: Colors.white),),
+                              content: Text(
+                                  "Today's data for these workouts will be over-written", style: TextStyle(color: Colors.grey[500]),),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      addStoredWorkoutDataToDatabase();
+                                      Navigator.pop(_);
+                                      showDialog(context: context, builder: (_) => AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                            color: Colors.white,
+                                            width: 4,
+                                          ),
+                                          borderRadius: BorderRadius.circular(30)
+                                        ),
+                                        backgroundColor: Colors.black,
+                                        content: Container(
+                                          color: Colors.black,
+                                          height: h*15,
+                                          width: w*60,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text('Progress Updated', style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),),
+                                              SizedBox(height: h*2,),
+                                              Icon(Icons.check_circle, color: Colors.white, size: 50,)
+                                            ],
+                                          ),
+                                        ),
+                                      ));
+                                    },
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(_);
+                                    },
+                                    child: Text(
+                                      'No',
+                                      style: TextStyle(color: Colors.red),
+                                    )),
+                              ],
+                            ));
+                  },
                 ),
                 SizedBox(width: w * 3),
               ],
@@ -111,19 +164,19 @@ class _AddNewProgressState extends State<AddNewProgress> {
                 showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                          backgroundColor: Color(0xFF262626),
+                          backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 color: Colors.white,
-                                width: 2,
+                                width: 4,
                               ),
                               borderRadius: BorderRadius.circular(40)),
                           content: Container(
                             height: h * 35,
-                            width: w * 65,
+                            width: w * 70,
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
+                                SizedBox(height: h*3,),
                                 Text(
                                   'Add New Workout',
                                   textAlign: TextAlign.center,
@@ -132,33 +185,37 @@ class _AddNewProgressState extends State<AddNewProgress> {
                                       fontSize: 35,
                                       fontWeight: FontWeight.bold),
                                 ),
+                                SizedBox(height: h*5,),
                                 TextField(
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                     cursorColor: Colors.white,
                                     controller: newWorkoutController,
                                     decoration: InputDecoration(
-                                      focusColor: Colors.red,
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.white
-                                        )
-                                      ),
+                                        focusColor: Colors.red,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.white)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.white)),
                                         label: Text(
-                                      'Workout Name',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: Colors.white,),
-                                    ),
-                                    labelStyle: TextStyle(color: Colors.white)
-                                    )),
+                                          'Workout Name',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        labelStyle:
+                                            TextStyle(color: Colors.white))),
+                                SizedBox(height: h*2,),
                                 TextButton(
-                                  style: TextButton.styleFrom(
-                                    onSurface: Colors.black,
-                                    side: BorderSide(
-                                      color: Colors.white,
-                                    )
-                                  ),
+                                    style: TextButton.styleFrom(
+                                        onSurface: Colors.black,
+                                        side: BorderSide(
+                                          color: Colors.white,
+                                        )),
                                     onPressed: () {
                                       addNewWorkout(newWorkoutController.text);
                                       Navigator.pop(_);
