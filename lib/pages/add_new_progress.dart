@@ -170,7 +170,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
                                 color: Colors.white,
                                 width: 4,
                               ),
-                              borderRadius: BorderRadius.circular(40)),
+                              borderRadius: BorderRadius.circular(10)),
                           content: Container(
                             height: h * 35,
                             width: w * 70,
@@ -186,29 +186,32 @@ class _AddNewProgressState extends State<AddNewProgress> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: h*5,),
-                                TextField(
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                    cursorColor: Colors.white,
-                                    controller: newWorkoutController,
-                                    decoration: InputDecoration(
-                                        focusColor: Colors.red,
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.white)),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.white)),
-                                        label: Text(
-                                          'Workout Name',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(w*2, 0, w*2, 0),
+                                  child: TextField(
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      cursorColor: Colors.white,
+                                      controller: newWorkoutController,
+                                      decoration: InputDecoration(
+                                          focusColor: Colors.red,
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.white)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.white)),
+                                          label: Text(
+                                            'Workout Name',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                        labelStyle:
-                                            TextStyle(color: Colors.white))),
+                                          labelStyle:
+                                              TextStyle(color: Colors.white))),
+                                ),
                                 SizedBox(height: h*2,),
                                 TextButton(
                                     style: TextButton.styleFrom(

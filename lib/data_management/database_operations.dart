@@ -41,8 +41,7 @@ class DayWorkoutData {
   }
 }
 
-Future<void> insertDayWorkoutData(
-    String workoutName, DayWorkoutData dayWorkoutData) async {
+Future<void> insertDayWorkoutData(String workoutName, DayWorkoutData dayWorkoutData) async {
   createWorkoutTableIfNotExists(workoutName);
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -79,4 +78,26 @@ Future<void> addStoredWorkoutDataToDatabase() async {
             numOfSet: workoutData['numOfSets']));
   }
   print('Data Logged Successfully');
+}
+
+Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'workouts_database.db'),
+  );
+
+  final db = await database;
+
+  // Query the table for all The Dogs.
+
+  final List<Map<String, dynamic>> maps = await db.query('$workoutName', orderBy: 'dateId', limit: 7);
+
+  // Convert the List<Map<String, dynamic> into a List<Dog>.
+  return List.generate(maps.length, (i) {
+    return DayWorkoutData(
+      dateId: maps[i]['dateId'],
+      perSet: maps[i]['perSet'],
+      numOfSet: maps[i]['numOfSet'],
+    );
+  });
 }
