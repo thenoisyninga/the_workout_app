@@ -20,12 +20,64 @@ class ProgressAnalytics extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-            body: Center(
-              child: ElevatedButton(
-                child: Text('Press Me'),
-                onPressed: () async {
-                  print(getPastDates(7));
-                },
+            body: Container(
+              alignment: Alignment.center,
+              child: ListView(
+                padding: EdgeInsets.all(w*4),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(w*5),
+                    child: Container(
+                      height: h*45,
+                      width: w*90,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: LineChartWidget(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(w*5),
+                    child: Container(
+                      height: h*45,
+                      width: w*90,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: LineChartWidget(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(w*5),
+                    child: Container(
+                      height: h*45,
+                      width: w*90,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: LineChartWidget(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(w*5),
+                    child: Container(
+                      height: h*45,
+                      width: w*90,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: LineChartWidget(),
+                      ),
+                    ),
+                  ),
+                ]
               ),
             ),
       ));

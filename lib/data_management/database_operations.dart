@@ -41,6 +41,19 @@ class DayWorkoutData {
   }
 }
 
+void createWorkoutTable(String workoutName) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'workouts_database.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE $workoutName(dateId INTEGER PRIMARY KEY, perSet INTEGER, numOfSet INTEGER)',
+      );
+    },
+    version: 1,
+  );
+}
+
 Future<void> insertDayWorkoutData(String workoutName, DayWorkoutData dayWorkoutData) async {
   createWorkoutTableIfNotExists(workoutName);
 
@@ -58,15 +71,14 @@ Future<void> insertDayWorkoutData(String workoutName, DayWorkoutData dayWorkoutD
   );
 }
 
-int generateDateID() {
-  DateTime now = DateTime.now();
+int generateDateID(DateTime now) {
   String dateToday = now.toString().substring(0, 10).replaceAll('-', '');
   return int.parse(dateToday);
 }
 
 Future<void> addStoredWorkoutDataToDatabase() async {
   List<Map> persistedDataList = await getWorkoutCardDataList();
-  int dateId = generateDateID();
+  int dateId = generateDateID(DateTime.now());
   for (Map workoutData in persistedDataList) {
     var workoutName = workoutData['workoutName'].toString().replaceAll('-', '');
     print(workoutName);
@@ -80,7 +92,7 @@ Future<void> addStoredWorkoutDataToDatabase() async {
   print('Data Logged Successfully');
 }
 
-Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName) async {
+Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName, int limit) async {
   WidgetsFlutterBinding.ensureInitialized();
   final database = openDatabase(
     join(await getDatabasesPath(), 'workouts_database.db'),
@@ -90,7 +102,7 @@ Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName) 
 
   // Query the table for all The Dogs.
 
-  final List<Map<String, dynamic>> maps = await db.query('$workoutName', orderBy: 'dateId', limit: 7);
+  final List<Map<String, dynamic>> maps = await db.query('$workoutName', orderBy: 'dateId', limit: limit);
 
   // Convert the List<Map<String, dynamic> into a List<Dog>.
   return List.generate(maps.length, (i) {
