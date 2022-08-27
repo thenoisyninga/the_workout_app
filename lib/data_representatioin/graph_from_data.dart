@@ -8,38 +8,48 @@ List<DateTime> getPastDates(int numOfDays) {
   for (var i = 0; i < numOfDays; i++) {
     returnList.add(date);
     date = date.subtract(Duration(days: 1));
-  };
+  }
+  ;
   return returnList;
 }
 
 class LineChartWidget extends StatelessWidget {
-  const LineChartWidget({Key? key}) : super(key: key);
+  LineChartWidget({Key? key, required this.workoutName, required this.limit})
+      : super(key: key);
+  final String workoutName;
+  final int limit;
+  var workoutDayData;
+
+  Future<void> getFutureWorkoutDataListFromDatabase() async {
+    // workoutDayData = await getWorkoutDataListFromDatabase(workoutName, limit);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        backgroundColor: Colors.white,
-        maxX: 7,
-        minX: 0,
-        maxY: 25,
-        minY: 0,
-        lineBarsData: [
-          LineChartBarData(
-            spots: [
-              FlSpot(0, 10),
-              FlSpot(1, 8),
-              FlSpot(2, 18),
-              FlSpot(3, 15),
-              FlSpot(4, 20),
-              FlSpot(5, 16),
-              FlSpot(6, 23),
-            ],
-            barWidth: 5,
-          )
-        ]
-      ),
-    );
+    getFutureWorkoutDataListFromDatabase();
+    return Container();
+    // return FutureBuilder(
+    //     future: getWorkoutDataListFromDatabase(workoutName, limit),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasData) {
+    //         return LineChart(
+    //           LineChartData(
+    //               backgroundColor: Colors.white,
+    //               maxX: 7,
+    //               minX: 0,
+    //               maxY: 25,
+    //               minY: 0,
+    //               lineBarsData: [
+    //                 LineChartBarData(
+    //                   spots: pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit),
+    //                   barWidth: 5,
+    //                 )
+    //               ]),
+    //         );
+    //       } else {
+    //         return CircularProgressIndicator();
+    //       }
+    //     });
   }
 }
 
@@ -59,11 +69,11 @@ List<FlSpot> pointsListFromWorkoutData(List<DayWorkoutData> dayWorkoutDataList, 
   for (var index = 0; index < returnList.length; index++) {
     for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
       if (returnList[index].x == dayWorkoutData.dateId) {
-        returnList[index] = FlSpot(index.toDouble(), dayWorkoutData.perSet.toDouble());
+        returnList[index] =
+            FlSpot(index.toDouble(), dayWorkoutData.perSet.toDouble());
       } else {
         returnList[index] = FlSpot(index.toDouble(), 0);
       }
-
     }
 
     return returnList;
@@ -91,4 +101,3 @@ int getMinYValue(List<DayWorkoutData> dayWorkoutDataList) {
   }
   return (min - 5);
 }
-

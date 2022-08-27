@@ -4,8 +4,7 @@ Future<void> addWorkoutData(String workoutName, int perSet,int numOfSets) async 
 
   final prefs = await SharedPreferences.getInstance();
 
-  List<String>? pulledWorkoutCardDataCache = prefs.getStringList(
-      'Workout Card Data Cache');
+  List<String>? pulledWorkoutCardDataCache = prefs.getStringList('Workout Card Data Cache');
 
   bool workoutCardAlreadyExists = false;
 

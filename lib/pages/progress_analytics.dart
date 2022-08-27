@@ -20,66 +20,44 @@ class ProgressAnalytics extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-            body: Container(
-              alignment: Alignment.center,
-              child: ListView(
-                padding: EdgeInsets.all(w*4),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(w*5),
-                    child: Container(
-                      height: h*45,
-                      width: w*90,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: LineChartWidget(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(w*5),
-                    child: Container(
-                      height: h*45,
-                      width: w*90,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: LineChartWidget(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(w*5),
-                    child: Container(
-                      height: h*45,
-                      width: w*90,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: LineChartWidget(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(w*5),
-                    child: Container(
-                      height: h*45,
-                      width: w*90,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: LineChartWidget(),
-                      ),
-                    ),
-                  ),
-                ]
-              ),
-            ),
+        // body: Container(
+        //   alignment: Alignment.center,
+        //   child: ListView(
+        //     padding: EdgeInsets.all(w*4),
+        //     children: [
+        //       Padding(
+        //         padding: EdgeInsets.all(w*5),
+        //         child: Container(
+        //           height: h*45,
+        //           width: w*90,
+        //           child: Card(
+        //             shape: RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(10)
+        //             ),
+        //             child: LineChartWidget(workoutName: 'Pushups', limit: 7,),
+        //           ),
+        //         ),
+        //       ),
+        //     ]
+        //   ),
+        // ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    addWorkoutTableToDatabase('Pushups');
+                  },
+                  child: Text('Add table')),
+              ElevatedButton(
+                  onPressed: () {
+                    removeTableFromDatabase('Pushups');
+                  },
+                  child: Text('print all tables')),
+            ],
+          ),
+        ),
       ));
     });
   }

@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:the_workout_app/data_management/workout_card_data_management.dart';
 
-void createWorkoutTableIfNotExists(String workoutName) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'workouts_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        'CREATE TABLE IF NOT EXISTS $workoutName(dateId INTEGER PRIMARY KEY, perSet INTEGER, numOfSet INTEGER)',
-      );
-    },
-    version: 1,
-  );
-}
 
 class DayWorkoutData {
   final int dateId;
@@ -41,34 +30,17 @@ class DayWorkoutData {
   }
 }
 
-void createWorkoutTable(String workoutName) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'workouts_database.db'),
-    onCreate: (db, version) {
-      return db.execute(
-        'CREATE TABLE $workoutName(dateId INTEGER PRIMARY KEY, perSet INTEGER, numOfSet INTEGER)',
-      );
-    },
-    version: 1,
-  );
-}
-
-Future<void> insertDayWorkoutData(String workoutName, DayWorkoutData dayWorkoutData) async {
-  createWorkoutTableIfNotExists(workoutName);
+Future<void> insertDayWorkoutDataToDatabase(String workoutName, DayWorkoutData dayWorkoutData) async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'workouts_database.db'),
-  );
+  // Get a location using getDatabasesPath
+  var databasesPath = await getDatabasesPath();
+  String path = join(databasesPath, 'workout_database.db');
 
-  final db = await database;
-
-  await db.insert(
-    workoutName,
-    dayWorkoutData.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
+  // Opening the database
+  Database workoutDatabase = await openDatabase(path, version: 1);
+  await workoutDatabase.insert(workoutName, dayWorkoutData.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  workoutDatabase.close();
 }
 
 int generateDateID(DateTime now) {
@@ -81,28 +53,27 @@ Future<void> addStoredWorkoutDataToDatabase() async {
   int dateId = generateDateID(DateTime.now());
   for (Map workoutData in persistedDataList) {
     var workoutName = workoutData['workoutName'].toString().replaceAll('-', '');
-    print(workoutName);
-    insertDayWorkoutData(
+    addWorkoutTableToDatabase(workoutName);
+    insertDayWorkoutDataToDatabase(
         workoutName,
         DayWorkoutData(
             dateId: dateId,
             perSet: workoutData['perSet'],
             numOfSet: workoutData['numOfSets']));
   }
-  print('Data Logged Successfully');
 }
 
 Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName, int limit) async {
   WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    join(await getDatabasesPath(), 'workouts_database.db'),
-  );
+  // Get a location using getDatabasesPath
+  var databasesPath = await getDatabasesPath();
+  String path = join(databasesPath, 'workout_database.db');
 
-  final db = await database;
+  // Opening the database
+  Database workoutDatabase = await openDatabase(path, version: 1);
 
-  // Query the table for all The Dogs.
 
-  final List<Map<String, dynamic>> maps = await db.query('$workoutName', orderBy: 'dateId', limit: limit);
+  final List<Map<String, dynamic>> maps = await workoutDatabase.query('$workoutName', orderBy: 'dateId', limit: limit);
 
   // Convert the List<Map<String, dynamic> into a List<Dog>.
   return List.generate(maps.length, (i) {
@@ -112,4 +83,67 @@ Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName, 
       numOfSet: maps[i]['numOfSet'],
     );
   });
+}
+
+
+
+Future<void> addWorkoutTableToDatabase(String workoutName) async {
+
+  // Get a location using getDatabasesPath
+  var databasesPath = await getDatabasesPath();
+  String path = join(databasesPath, 'workout_database.db');
+
+  // Opening the database
+  Database workoutDatabase = await openDatabase(path, version: 1);
+  
+  List<String> databaseTablesList = await getDatabaseTablesList();
+
+  if (!databaseTablesList.contains(workoutName)) {
+    workoutDatabase.execute('CREATE TABLE ${workoutName}(dateId INTEGER PRIMARY KEY, perSet INTEGER, numOfSet INTEGER);');
+    addToDatabaseTablesList(workoutName);
+    print('table added');
+  } else {
+    print('table already exists.');
+  }
+  workoutDatabase.close();
+}
+
+Future<List<String>> getDatabaseTablesList() async {
+  final prefs = await SharedPreferences.getInstance();
+  var x = prefs.getStringList('workoutTablesInDatabase');
+  if (x == null) {
+    return [];
+  } else {
+    return x;
+  }
+}
+
+Future<void> addToDatabaseTablesList(String workoutName) async {
+  List<String> oldList = await getDatabaseTablesList();
+  final prefs = await SharedPreferences.getInstance();
+  oldList.add(workoutName);
+  prefs.setStringList('workoutTablesInDatabase', oldList);
+}
+
+Future<void> removeFromDatabaseTablesList(String workoutName) async {
+  List<String> oldList = await getDatabaseTablesList();
+  final prefs = await SharedPreferences.getInstance();
+  oldList.remove(workoutName);
+  prefs.setStringList('workoutTablesInDatabase', oldList);
+}
+
+Future<void> removeTableFromDatabase(String workoutName) async {
+  var databasesPath = await getDatabasesPath();
+  String path = join(databasesPath, 'workout_database.db');
+
+  // Opening the database
+  Database workoutDatabase = await openDatabase(path, version: 1);
+  List<String> oldList = await getDatabaseTablesList();
+  if (oldList.contains(workoutName)) {
+    workoutDatabase.execute('drop table $workoutName');
+    removeFromDatabaseTablesList(workoutName);
+    print('table removed');
+  } else {
+    print('the table does not exist');
+  }
 }

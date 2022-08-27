@@ -84,7 +84,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
                               actions: [
                                 TextButton(
                                     onPressed: () {
-                                      addStoredWorkoutDataToDatabase();
+                                      // addStoredWorkoutDataToDatabase();
                                       Navigator.pop(_);
                                       showDialog(context: context, builder: (_) => AlertDialog(
                                         shape: RoundedRectangleBorder(
