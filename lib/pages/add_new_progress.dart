@@ -84,7 +84,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
                               actions: [
                                 TextButton(
                                     onPressed: () {
-                                      // addStoredWorkoutDataToDatabase();
+                                      addStoredWorkoutDataToDatabase();
                                       Navigator.pop(_);
                                       showDialog(context: context, builder: (_) => AlertDialog(
                                         shape: RoundedRectangleBorder(
@@ -137,7 +137,7 @@ class _AddNewProgressState extends State<AddNewProgress> {
           ),
           body: SizedBox(
               child: FutureBuilder(
-            future: getWorkoutCardDataList(),
+            future: getPersistedWorkoutCardDataList(),
             builder: (BuildContext context,
                 AsyncSnapshot<List<Map<dynamic, dynamic>>> snapshot) {
               return ListView(

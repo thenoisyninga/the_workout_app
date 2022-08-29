@@ -14,48 +14,113 @@ List<DateTime> getPastDates(int numOfDays) {
 }
 
 class LineChartWidget extends StatelessWidget {
-  LineChartWidget({Key? key, required this.workoutName, required this.limit})
+  LineChartWidget({Key? key, required this.workoutName, required this.presentationMode})
       : super(key: key);
   final String workoutName;
-  final int limit;
+  final String presentationMode;
   var workoutDayData;
-
-  Future<void> getFutureWorkoutDataListFromDatabase() async {
-    // workoutDayData = await getWorkoutDataListFromDatabase(workoutName, limit);
-  }
+  int limit = 7;
+  String xAxisTitle = 'Last 7 days';
 
   @override
   Widget build(BuildContext context) {
-    getFutureWorkoutDataListFromDatabase();
-    return Container();
-    // return FutureBuilder(
-    //     future: getWorkoutDataListFromDatabase(workoutName, limit),
-    //     builder: (context, snapshot) {
-    //       if (snapshot.hasData) {
-    //         return LineChart(
-    //           LineChartData(
-    //               backgroundColor: Colors.white,
-    //               maxX: 7,
-    //               minX: 0,
-    //               maxY: 25,
-    //               minY: 0,
-    //               lineBarsData: [
-    //                 LineChartBarData(
-    //                   spots: pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit),
-    //                   barWidth: 5,
-    //                 )
-    //               ]),
-    //         );
-    //       } else {
-    //         return CircularProgressIndicator();
-    //       }
-    //     });
+    if (presentationMode == 'weekly') {
+      limit = 7;
+      xAxisTitle = 'Last 7 days';
+    } else if (presentationMode == 'monthly') {
+      limit = 30;
+      xAxisTitle = 'Last 30 days';
+    } else if (presentationMode == 'yearly') {
+      limit = 365;
+      xAxisTitle = 'Past Year';
+    } else {
+      limit = 7;
+      xAxisTitle = 'Last 7 days';
+    }
+    return FutureBuilder(
+        future: getWorkoutDataListFromDatabase(workoutName, limit),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return LineChart(
+              LineChartData(
+                  backgroundColor: Colors.white,
+                  maxX: limit.toDouble(),
+                  minX: 1,
+                  maxY: getMaxYValue(pointsListFromWorkoutData(
+                      snapshot.data! as List<DayWorkoutData>, limit)),
+                  minY: getMinYValue(pointsListFromWorkoutData(
+                      snapshot.data! as List<DayWorkoutData>, limit)),
+                  baselineX: 0,
+                  baselineY: getMinYValue(pointsListFromWorkoutData(
+                      snapshot.data! as List<DayWorkoutData>, limit)),
+                  gridData: FlGridData(
+                    show: true,
+                    drawHorizontalLine: true,
+                    drawVerticalLine: false,
+                  ),
+                  titlesData: FlTitlesData(
+                    show: true,
+                    rightTitles: AxisTitles(
+                        axisNameWidget: Text(
+                          'Per Set',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        axisNameSize: 30),
+                    bottomTitles: AxisTitles(
+                      axisNameWidget: Text(
+                        'Last 7 days',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      axisNameSize: 40,
+                    ),
+                    topTitles: AxisTitles(
+                      axisNameSize: 100,
+                      axisNameWidget: Text(
+                        workoutName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 37),
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border(
+                      top: BorderSide.none,
+                      left: BorderSide(),
+                      right: BorderSide.none,
+                      bottom: BorderSide(),
+                    )
+                  ),
+                  lineBarsData: [
+                    LineChartBarData(
+                        spots: pointsListFromWorkoutData(
+                            snapshot.data! as List<DayWorkoutData>, limit),
+                        barWidth: 5,
+                        dotData: FlDotData(show: false),
+                        color: Colors.black,
+                        isCurved: false,
+                        belowBarData: BarAreaData(
+                          show: true,
+                          color: Colors.black87,
+                        ))
+                  ]),
+            );
+          } else {
+            return Center(
+              child: Container(
+                  height: 20, width: 20, child: CircularProgressIndicator()),
+            );
+          }
+        });
   }
 }
 
-List<FlSpot> pointsListFromWorkoutData(List<DayWorkoutData> dayWorkoutDataList, int limit) {
+List<FlSpot> pointsListFromWorkoutData(
+    List<DayWorkoutData> dayWorkoutDataList, int limit) {
   List<DateTime> datesList = getPastDates(limit);
   List<int> dateIdList = [];
+
+  print('pointsListFromWorkoutData called.');
 
   for (var date in datesList) {
     dateIdList.add(generateDateID(date));
@@ -70,34 +135,32 @@ List<FlSpot> pointsListFromWorkoutData(List<DayWorkoutData> dayWorkoutDataList, 
     for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
       if (returnList[index].x == dayWorkoutData.dateId) {
         returnList[index] =
-            FlSpot(index.toDouble(), dayWorkoutData.perSet.toDouble());
+            FlSpot(limit - index.toDouble(), dayWorkoutData.perSet.toDouble());
       } else {
-        returnList[index] = FlSpot(index.toDouble(), 0);
+        returnList[index] = FlSpot(limit - index.toDouble(), 0);
       }
     }
-
-    return returnList;
   }
 
   return returnList;
 }
 
-int getMaxYValue(List<DayWorkoutData> dayWorkoutDataList) {
-  int max = 0;
-  for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
-    if (dayWorkoutData.perSet > max) {
-      max = dayWorkoutData.perSet;
+double getMaxYValue(List<FlSpot> FlSpotsList) {
+  var max = 0.0;
+  for (var spot in FlSpotsList) {
+    if (spot.y > max) {
+      max = spot.y;
     }
   }
-  return (max + 5);
+  return (max);
 }
 
-int getMinYValue(List<DayWorkoutData> dayWorkoutDataList) {
-  var min = 100000000000000000;
-  for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
-    if (dayWorkoutData.perSet < min) {
-      min = dayWorkoutData.perSet;
+double getMinYValue(List<FlSpot> FlSpotsList) {
+  var min = 100000000000000000.0;
+  for (var spot in FlSpotsList) {
+    if (spot.y < min) {
+      min = spot.y;
     }
   }
-  return (min - 5);
+  return (min - 2);
 }

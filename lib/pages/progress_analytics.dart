@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_workout_app/data_management/database_operations.dart';
 
-import '../data_management/database_operations.dart';
-import '../data_representatioin/graph_from_data.dart';
+import '../custom_widgets/workout_graph.dart';
 
 class ProgressAnalytics extends StatelessWidget {
   const ProgressAnalytics({Key? key}) : super(key: key);
@@ -20,42 +20,26 @@ class ProgressAnalytics extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        // body: Container(
-        //   alignment: Alignment.center,
-        //   child: ListView(
-        //     padding: EdgeInsets.all(w*4),
-        //     children: [
-        //       Padding(
-        //         padding: EdgeInsets.all(w*5),
-        //         child: Container(
-        //           height: h*45,
-        //           width: w*90,
-        //           child: Card(
-        //             shape: RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(10)
-        //             ),
-        //             child: LineChartWidget(workoutName: 'Pushups', limit: 7,),
-        //           ),
-        //         ),
-        //       ),
-        //     ]
-        //   ),
-        // ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    addWorkoutTableToDatabase('Pushups');
-                  },
-                  child: Text('Add table')),
-              ElevatedButton(
-                  onPressed: () {
-                    removeTableFromDatabase('Pushups');
-                  },
-                  child: Text('print all tables')),
-            ],
+        body: Container(
+          alignment: Alignment.center,
+          child: FutureBuilder(
+            future: getDatabaseTablesList(),
+            builder:
+                (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+              if (snapshot.hasData) {
+                return ListView(padding: EdgeInsets.all(w * 4), children: [
+                  for (String workoutName in snapshot.data as List<String>)
+                    (WorkoutGraph(
+                      workoutName: workoutName,
+                      presentationMode: 'weekly',
+                      width: 300,
+                      height: 375,
+                    ))
+                ]);
+              } else {
+                return SizedBox(height: 10, width: 10, child: CircularProgressIndicator());
+              }
+            },
           ),
         ),
       ));

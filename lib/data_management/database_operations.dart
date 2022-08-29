@@ -39,8 +39,10 @@ Future<void> insertDayWorkoutDataToDatabase(String workoutName, DayWorkoutData d
 
   // Opening the database
   Database workoutDatabase = await openDatabase(path, version: 1);
+  print("Inserting into table '$workoutName'");
   await workoutDatabase.insert(workoutName, dayWorkoutData.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
-  workoutDatabase.close();
+
+  await workoutDatabase.close();
 }
 
 int generateDateID(DateTime now) {
@@ -49,17 +51,35 @@ int generateDateID(DateTime now) {
 }
 
 Future<void> addStoredWorkoutDataToDatabase() async {
-  List<Map> persistedDataList = await getWorkoutCardDataList();
+  List<Map> persistedDataList = await getPersistedWorkoutCardDataList();
   int dateId = generateDateID(DateTime.now());
   for (Map workoutData in persistedDataList) {
     var workoutName = workoutData['workoutName'].toString().replaceAll('-', '');
-    addWorkoutTableToDatabase(workoutName);
+    // addWorkoutTableToDatabase(workoutName);
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, 'workout_database.db');
+
+    // Opening the database
+    Database workoutDatabase = await openDatabase(path, version: 1);
+
+    List<String> databaseTablesList = await getDatabaseTablesList();
+    print(databaseTablesList);
+    if (!databaseTablesList.contains(workoutName)) {
+      await workoutDatabase.execute('CREATE TABLE $workoutName(dateId INTEGER PRIMARY KEY, perSet INTEGER, numOfSet INTEGER);');
+
+      addToDatabaseTablesList(workoutName);
+      print("table added '$workoutName'");
+    } else {
+      print("table '$workoutName' already exists.");
+    }
+
     insertDayWorkoutDataToDatabase(
         workoutName,
         DayWorkoutData(
             dateId: dateId,
             perSet: workoutData['perSet'],
-            numOfSet: workoutData['numOfSets']));
+            numOfSet: workoutData['numOfSets'])
+    );
   }
 }
 
@@ -74,9 +94,10 @@ Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName, 
 
 
   final List<Map<String, dynamic>> maps = await workoutDatabase.query('$workoutName', orderBy: 'dateId', limit: limit);
-
+  print('the fetched string data: $maps');
   // Convert the List<Map<String, dynamic> into a List<Dog>.
   return List.generate(maps.length, (i) {
+    print('${maps[i]['dateId']}, perSet: ${maps[i]['perSet']}, numOfSets: ${maps[i]['numOfSet']}');
     return DayWorkoutData(
       dateId: maps[i]['dateId'],
       perSet: maps[i]['perSet'],
@@ -105,7 +126,6 @@ Future<void> addWorkoutTableToDatabase(String workoutName) async {
   } else {
     print('table already exists.');
   }
-  workoutDatabase.close();
 }
 
 Future<List<String>> getDatabaseTablesList() async {
@@ -129,6 +149,7 @@ Future<void> removeFromDatabaseTablesList(String workoutName) async {
   List<String> oldList = await getDatabaseTablesList();
   final prefs = await SharedPreferences.getInstance();
   oldList.remove(workoutName);
+  print("removed table '$workoutName'.");
   prefs.setStringList('workoutTablesInDatabase', oldList);
 }
 

@@ -12,7 +12,6 @@ Future<void> addWorkoutData(String workoutName, int perSet,int numOfSets) async 
   if (pulledWorkoutCardDataCache == null) {
     prefs.setStringList('Workout Card Data Cache', []);
   } else {
-    List<Map> returnMapList = [];
     for (String stringData in pulledWorkoutCardDataCache) {
       List<String> x = stringData.split(',');
       if (workoutName.toLowerCase() == x[0].toLowerCase()) {
@@ -63,7 +62,7 @@ Future<void> removeWorkoutData(String workoutName) async {
   }
 }
 
-Future<List<Map>> getWorkoutCardDataList() async {
+Future<List<Map>> getPersistedWorkoutCardDataList() async {
   final prefs = await SharedPreferences.getInstance();
 
   List<String>? pulledWorkoutCardDataCache = prefs.getStringList(
@@ -73,6 +72,7 @@ Future<List<Map>> getWorkoutCardDataList() async {
     prefs.setStringList('Workout Card Data Cache', []);
     return [];
   } else {
+    print('Persisted Workout Data: $pulledWorkoutCardDataCache');
     List<Map> returnMapList = [];
     for (String stringData in pulledWorkoutCardDataCache) {
       List<String> x = stringData.split(',');
@@ -83,6 +83,7 @@ Future<List<Map>> getWorkoutCardDataList() async {
       };
       returnMapList.add(returnMap);
     }
+    print("Generated Map from persisted data: $returnMapList");
     return returnMapList;
   }
 }
