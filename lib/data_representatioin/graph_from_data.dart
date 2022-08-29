@@ -20,42 +20,45 @@ class LineChartWidget extends StatelessWidget {
   final int limit;
   var workoutDayData;
 
-  Future<void> getFutureWorkoutDataListFromDatabase() async {
-    // workoutDayData = await getWorkoutDataListFromDatabase(workoutName, limit);
-  }
-
   @override
   Widget build(BuildContext context) {
-    getFutureWorkoutDataListFromDatabase();
-    return Container();
-    // return FutureBuilder(
-    //     future: getWorkoutDataListFromDatabase(workoutName, limit),
-    //     builder: (context, snapshot) {
-    //       if (snapshot.hasData) {
-    //         return LineChart(
-    //           LineChartData(
-    //               backgroundColor: Colors.white,
-    //               maxX: 7,
-    //               minX: 0,
-    //               maxY: 25,
-    //               minY: 0,
-    //               lineBarsData: [
-    //                 LineChartBarData(
-    //                   spots: pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit),
-    //                   barWidth: 5,
-    //                 )
-    //               ]),
-    //         );
-    //       } else {
-    //         return CircularProgressIndicator();
-    //       }
-    //     });
+    return FutureBuilder(
+        future: getWorkoutDataListFromDatabase(workoutName, limit),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return LineChart(
+              LineChartData(
+                  backgroundColor: Colors.white,
+                  maxX: limit.toDouble(),
+                  minX: 1,
+                  maxY: getMaxYValue(pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit)),
+                  minY: getMinYValue(pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit)),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: pointsListFromWorkoutData(snapshot.data! as List<DayWorkoutData>, limit),
+                      barWidth: 5,
+                    )
+                  ]),
+            );
+          } else {
+            return Center(
+              child: Container(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator()
+              ),
+            );
+          }
+        });
   }
 }
 
-List<FlSpot> pointsListFromWorkoutData(List<DayWorkoutData> dayWorkoutDataList, int limit) {
+List<FlSpot> pointsListFromWorkoutData(
+    List<DayWorkoutData> dayWorkoutDataList, int limit) {
   List<DateTime> datesList = getPastDates(limit);
   List<int> dateIdList = [];
+
+  print('pointsListFromWorkoutData called.');
 
   for (var date in datesList) {
     dateIdList.add(generateDateID(date));
@@ -70,34 +73,37 @@ List<FlSpot> pointsListFromWorkoutData(List<DayWorkoutData> dayWorkoutDataList, 
     for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
       if (returnList[index].x == dayWorkoutData.dateId) {
         returnList[index] =
-            FlSpot(index.toDouble(), dayWorkoutData.perSet.toDouble());
+            FlSpot(limit - index.toDouble(), dayWorkoutData.perSet.toDouble());
       } else {
-        returnList[index] = FlSpot(index.toDouble(), 0);
+        returnList[index] = FlSpot(limit - index.toDouble(), 0);
       }
     }
-
-    return returnList;
   }
 
   return returnList;
 }
 
-int getMaxYValue(List<DayWorkoutData> dayWorkoutDataList) {
-  int max = 0;
-  for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
-    if (dayWorkoutData.perSet > max) {
-      max = dayWorkoutData.perSet;
+double getMaxYValue(List<FlSpot> FlSpotsList) {
+  var max = 0.0;
+  for (var spot in FlSpotsList) {
+    if (spot.y > max) {
+      max = spot.y;
     }
   }
-  return (max + 5);
+  return (max + 2);
 }
 
-int getMinYValue(List<DayWorkoutData> dayWorkoutDataList) {
-  var min = 100000000000000000;
-  for (DayWorkoutData dayWorkoutData in dayWorkoutDataList) {
-    if (dayWorkoutData.perSet < min) {
-      min = dayWorkoutData.perSet;
+
+double getMinYValue(List<FlSpot> FlSpotsList) {
+  var min = 100000000000000000.0;
+  for (var spot in FlSpotsList) {
+    if (spot.y < min) {
+      min = spot.y;
     }
   }
-  return (min - 5);
+  if (min <= 2){
+    return min;
+  } else {
+    return (min - 2);
+  }
 }

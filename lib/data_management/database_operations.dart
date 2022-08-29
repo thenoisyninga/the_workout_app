@@ -49,7 +49,7 @@ int generateDateID(DateTime now) {
 }
 
 Future<void> addStoredWorkoutDataToDatabase() async {
-  List<Map> persistedDataList = await getWorkoutCardDataList();
+  List<Map> persistedDataList = await getPersistedWorkoutCardDataList();
   int dateId = generateDateID(DateTime.now());
   for (Map workoutData in persistedDataList) {
     var workoutName = workoutData['workoutName'].toString().replaceAll('-', '');
@@ -74,9 +74,10 @@ Future<List<DayWorkoutData>> getWorkoutDataListFromDatabase(String workoutName, 
 
 
   final List<Map<String, dynamic>> maps = await workoutDatabase.query('$workoutName', orderBy: 'dateId', limit: limit);
-
+  print('the fetched string data: $maps');
   // Convert the List<Map<String, dynamic> into a List<Dog>.
   return List.generate(maps.length, (i) {
+    print('${maps[i]['dateId']}, perSet: ${maps[i]['perSet']}, numOfSets: ${maps[i]['numOfSet']}');
     return DayWorkoutData(
       dateId: maps[i]['dateId'],
       perSet: maps[i]['perSet'],
